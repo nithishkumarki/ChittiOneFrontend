@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
+import coursesData from '../data/coursesData';
 
 export const ChittiContext = createContext(null);
 
@@ -10,17 +11,6 @@ const GRADE_OPTIONS = [
   'Others',
 ];
 
-// Initial course data pool
-const DUMMY_COURSES = [
-  { id: 'alphabet-fun', title: 'Alphabet Fun', type: 'course', description: 'Early learning foundational alphabets', thumbnail: 'https://via.placeholder.com/400x220/ff69b4/ffffff?text=Alphabet+Fun' },
-  { id: 'biology-1', title: 'Biology', type: 'course', description: 'Core Biology & Life Sciences', thumbnail: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&w=400&q=80' },
-  { id: 'biology-2', title: 'Biology', type: 'course', description: 'Advanced Biological Concepts', thumbnail: 'https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=400&q=80' },
-  { id: 'cwc', title: 'CWC', type: 'course', description: 'Coding & Web Course', thumbnail: 'https://via.placeholder.com/400x220/330066/ffffff?text=CWC' },
-  { id: 'chemistry', title: 'Chemistry', type: 'course', description: 'Chemical Foundations', thumbnail: 'https://via.placeholder.com/400x220/001133/3399ff?text=Chemistry' },
-  { id: 'physics', title: 'Physics', type: 'course', description: 'Laws of Motion', thumbnail: 'https://via.placeholder.com/400x220/003322/00ffcc?text=Physics' }
-];
-
-// Initial shorts data pool
 const DUMMY_SHORTS = [
   { id: 'short-1', title: 'DNA Double Helix Explained', type: 'short', category: 'Biology', thumbnail: 'https://via.placeholder.com/200x320/221100/ff3333?text=DNA+Helix' },
   { id: 'short-2', title: 'Coanda Effect Demo', type: 'short', category: 'Physics', thumbnail: 'https://via.placeholder.com/200x320/003322/00ffcc?text=Coanda+Effect' },
@@ -30,7 +20,7 @@ const DUMMY_SHORTS = [
 const ChittiContextProvider = (props) => {
   const [userData, setUserData] = useState(null);
   const [builds, setBuilds] = useState([]);
-  const [courses, setCourses] = useState(DUMMY_COURSES);
+  const [courses, setCourses] = useState(coursesData);
   const [shorts, setShorts] = useState(DUMMY_SHORTS);
   const [searchQuery, setSearchQuery] = useState('');
 

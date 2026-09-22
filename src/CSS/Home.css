@@ -118,44 +118,64 @@
   width: 180px;
 }
 
-/* Shorts Grid (6 Columns) */
-.shorts-grid-6 {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+/* Shorts Horizontal Carousel */
+.shorts-carousel-container {
+  display: flex;
   gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+.shorts-carousel-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar Chrome/Safari */
 }
 
 .short-feed-card {
+  flex: 0 0 calc(20% - 10px); /* Displays 5 cards on desktop and lets the rest scroll */
+  min-width: 140px;
+  max-width: 180px;
   cursor: pointer;
+  scroll-snap-align: start;
 }
 
 .short-img-wrapper {
   width: 100%;
   aspect-ratio: 9 / 16;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   background-color: #000;
+  position: relative;
 }
 
 .short-img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
 }
 
 .short-feed-card:hover img {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 .short-feed-title {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #333;
   margin: 6px 0 0 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .short-feed-card {
+    flex: 0 0 calc(40% - 8px); /* Displays ~2.5 cards on mobile screens */
+  }
 }
 
 /* Course Grid */

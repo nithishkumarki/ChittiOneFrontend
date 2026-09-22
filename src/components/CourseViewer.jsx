@@ -5,7 +5,6 @@ import { ChittiContext } from '../context/ChittiContext.jsx';
 import coursesData from '../data/coursesData';
 import '../CSS/CourseViewer.css';
 
-// Same env var your other pages already use for the API base.
 const API_BASE = import.meta.env?.VITE_ALCB_API_URL || 'http://localhost:4000';
 
 export default function CourseViewer() {
@@ -18,23 +17,19 @@ export default function CourseViewer() {
   const [expandedModule, setExpandedModule] = useState(
     courseData?.modules?.[0]?.id ?? null
   );
-  const [activeVideoUrl, setActiveVideoUrl] = useState(null);
+  const [activeVideo, setActiveVideo] = useState(
+    courseData?.modules?.[0]?.videos?.[0] || null
+  );
   const [completedVideos, setCompletedVideos] = useState([]);
   const [loadingProgress, setLoadingProgress] = useState(true);
   const [saveError, setSaveError] = useState(null);
 
   const authToken = localStorage.getItem('auth-token');
   const userId = userData?._id;
-  // A token exists but ChittiContext's fetchUserData() call hasn't
-  // resolved yet — this is "logged in, still loading", not "logged out".
   const isResolvingUser = !!authToken && !userData;
 
-  // Load existing progress for this user + course on mount
   useEffect(() => {
-    if (isResolvingUser) {
-      // Wait for userData to arrive before deciding anything.
-      return;
-    }
+    if (isResolvingUser) return;
     if (!userId || !courseId) {
       setLoadingProgress(false);
       return;
@@ -44,9 +39,7 @@ export default function CourseViewer() {
 
     const fetchProgress = async () => {
       try {
-        const res = await fetch(
-          `${API_BASE}/api/progress/${userId}/${courseId}`
-        );
+        const res = await fetch(`${API_BASE}/api/progress/${userId}/${courseId}`);
         if (!res.ok) throw new Error(`Progress fetch failed: ${res.status}`);
         const data = await res.json();
         if (!cancelled) {
@@ -70,24 +63,18 @@ export default function CourseViewer() {
   };
 
   const handleVideoSelect = async (video) => {
-    setActiveVideoUrl(video.url);
+    setActiveVideo(video);
 
     if (completedVideos.includes(video.id)) return;
 
-    // Optimistic UI update
     setCompletedVideos((prev) => [...prev, video.id]);
     setSaveError(null);
 
     if (!authToken) {
-      // Genuinely no session — nothing to persist, but don't silently
-      // pretend it saved either.
       setSaveError('Not logged in: progress will not be saved.');
       return;
     }
     if (!userId) {
-      // We have a token but userData hasn't loaded yet (e.g. clicked a
-      // video right after page load). Skip the save rather than sending
-      // userId: undefined to the backend.
       setSaveError('Still loading your account — try again in a moment.');
       return;
     }
@@ -109,13 +96,10 @@ export default function CourseViewer() {
       if (!res.ok) throw new Error(`Save failed: ${res.status}`);
 
       const data = await res.json();
-      // Reconcile with what the server actually persisted, in case it
-      // differs from our optimistic guess.
       setCompletedVideos(data.completedVideos || []);
     } catch (err) {
       console.error('Error saving progress:', err);
-      setSaveError('Could not save progress. It may not persist on refresh.');
-      // Roll back the optimistic update
+      setSaveError('Could not save progress.');
       setCompletedVideos((prev) => prev.filter((id) => id !== video.id));
     }
   };
@@ -124,38 +108,42 @@ export default function CourseViewer() {
     return (
       <div className="course-viewer-container">
         <button className="back-btn" onClick={() => navigate('/courses')}>
-          ← Back to Courses
+          ← Back to Overview
         </button>
         <p>Course not found.</p>
       </div>
     );
   }
 
+  const currentVideo = activeVideo || courseData?.modules?.[0]?.videos?.[0];
+
   return (
     <div className="course-viewer-container">
-      <button className="back-btn" onClick={() => navigate('/courses')}>
-        ← Back to Courses
-      </button>
-
       {saveError && <div className="progress-error-banner">{saveError}</div>}
 
       <div className="course-viewer-grid">
-        {/* Left Side: Video Player */}
+        {/* Left Section / Main Player Area */}
         <div className="video-column">
           <div className="media-wrapper">
-            {activeVideoUrl ? (
-              <video src={activeVideoUrl} controls autoPlay className="media-content" />
+            {currentVideo?.url ? (
+              <video src={currentVideo.url} controls autoPlay className="media-content" />
             ) : (
               <img src={courseData.thumbnail} alt={courseData.title} className="media-content" />
             )}
           </div>
-          <h1 className="course-title">{courseData.title}</h1>
-          <p className="course-meta">
-            {courseData.modulesCount} module · {courseData.videosCount} videos
-          </p>
+
+          <div className="course-header-row">
+            <div>
+              <h1 className="course-title">{currentVideo?.title || courseData.title}</h1>
+              <p className="course-subtitle">{courseData.title}</p>
+            </div>
+            <button className="back-overview-btn" onClick={() => navigate('/courses')}>
+              Back to overview
+            </button>
+          </div>
         </div>
 
-        {/* Right Side: Timeline Playlist */}
+        {/* Right Section / Modules Sidebar */}
         <div className="modules-column">
           {courseData.modules.length === 0 && (
             <p className="no-modules-text">No modules yet for this course.</p>
@@ -176,6 +164,7 @@ export default function CourseViewer() {
                   {loadingProgress && <p className="progress-loading-text">Loading progress…</p>}
                   {module.videos.map((video, idx) => {
                     const isCompleted = completedVideos.includes(video.id);
+                    const isActive = currentVideo?.id === video.id;
                     const isLast = idx === module.videos.length - 1;
 
                     return (
@@ -184,18 +173,20 @@ export default function CourseViewer() {
                           <div className={`status-icon ${isCompleted ? 'completed' : 'pending'}`}>
                             {isCompleted ? <FaCheckCircle /> : <FaPlayCircle />}
                           </div>
-                          {!isLast && <div className={`timeline-line ${isCompleted ? 'active-line' : ''}`} />}
+                          {!isLast && (
+                            <div className={`timeline-line ${isCompleted ? 'active-line' : ''}`} />
+                          )}
                         </div>
 
                         <div
-                          className={`video-card ${activeVideoUrl === video.url ? 'active' : ''}`}
+                          className={`video-card ${isActive ? 'active' : ''}`}
                           onClick={() => handleVideoSelect(video)}
                         >
                           <div className="video-details">
                             <h4 className="video-name">{video.title}</h4>
                             <span className="video-duration">Video · {video.duration}</span>
                           </div>
-                          {!isCompleted && <span className="watch-btn">Watch →</span>}
+                          {!isCompleted && !isActive && <span className="watch-btn">Watch →</span>}
                         </div>
                       </div>
                     );

@@ -1,50 +1,42 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChittiContext } from '../context/ChittiContext.jsx';
-import CourseViewer from '../components/CourseViewer';
+import coursesData from '../data/coursesData';
 import '../CSS/Courses.css';
 
-const coursesData = [
-  { id: 'biology', title: 'Biology', modulesCount: 1, videosCount: 64, thumbnail: 'https://via.placeholder.com/400x220/221100/ff3333?text=Biology' },
-  { id: 'cwc', title: 'CWC', modulesCount: 1, videosCount: 12, thumbnail: 'https://via.placeholder.com/400x220/330066/ffffff?text=CWC' },
-  { id: 'chemistry', title: 'Chemistry', modulesCount: 1, videosCount: 20, thumbnail: 'https://via.placeholder.com/400x220/001133/3399ff?text=Chemistry' },
-  { id: 'physics', title: 'Physics', modulesCount: 1, videosCount: 15, thumbnail: 'https://via.placeholder.com/400x220/003322/00ffcc?text=Physics' }
-];
-
 export default function Courses() {
-  const { searchQuery } = useContext(ChittiContext);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const navigate = useNavigate();
+  const { selectedGrade, courses } = useContext(ChittiContext);
 
-  // Filter courses by context query
-  const filteredCourses = coursesData.filter((course) =>
-    course.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
+  const courseList = courses || coursesData;
+  const filteredCourses = courseList.filter(
+    (course) => !selectedGrade || course.grade === selectedGrade
   );
-
-  if (selectedCourse) {
-    return <CourseViewer course={selectedCourse} onBack={() => setSelectedCourse(null)} />;
-  }
 
   return (
     <div className="courses-grid-page">
-      <h1 className="page-heading">Courses</h1>
+      <h2 className="page-heading">
+        Courses {selectedGrade ? `(${selectedGrade})` : ''}
+      </h2>
       <div className="courses-grid">
         {filteredCourses.length > 0 ? (
           filteredCourses.map((course) => (
             <div
               key={course.id}
               className="course-card"
-              onClick={() => setSelectedCourse(course)}
+              onClick={() => navigate(`/courses/${course.id}`)}
             >
               <div className="card-image-wrapper">
                 <img src={course.thumbnail} alt={course.title} />
               </div>
               <div className="card-info">
                 <h3>{course.title}</h3>
-                <p>{course.modulesCount} module</p>
+                <p>{course.modulesCount || course.modules?.length || 1} module</p>
               </div>
             </div>
           ))
         ) : (
-          <p className="no-results">No courses match "{searchQuery}"</p>
+          <p className="no-courses-text">No courses found for {selectedGrade}.</p>
         )}
       </div>
     </div>

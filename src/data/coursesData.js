@@ -1,15 +1,6 @@
 // data/coursesData.js
 // Single source of truth for course data. Both the Courses grid page and
 // CourseViewer read from here instead of keeping their own separate copies.
-//
-// Each course has a `grade` field matching one of the options in
-// ChittiContext's gradeOptions, used by Courses.jsx to filter the grid.
-// Every course has exactly 2 modules. Each video points to a local file
-// under /public/videos/ (sample-1.mp4 .. sample-6.mp4, cycled) so playback
-// has zero external network dependency — swap these for your real lesson
-// URLs (YouTube unlisted, Cloudinary, S3, etc.) whenever you have them.
-// Thumbnails are inline SVG data URIs (no network call) since
-// via.placeholder.com has become unreliable / times out.
 
 const coursesData = [
   // ---------- Class Kindergarten to UKG ----------

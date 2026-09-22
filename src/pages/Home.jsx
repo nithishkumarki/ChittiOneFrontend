@@ -103,31 +103,31 @@ export default function Home() {
         </section>
       )}
 
-      {/* 3. Shorts For You Section */}
-      <section className="home-section">
-        <div className="section-header">
-          <h3>Shorts for you</h3>
-          <Link to="/shorts" className="view-all-link">View all</Link>
-        </div>
-        {loadingShorts ? (
-          <div className="section-loading">Loading shorts...</div>
-        ) : (
-          <div className="shorts-grid-6">
-            {shorts.map((item) => (
-              <div
-                key={item.id}
-                className="short-feed-card"
-                onClick={() => navigate('/shorts')}
-              >
-                <div className="short-img-wrapper">
-                  <img src={item.thumbnailUrl} alt={item.title} />
-                </div>
-                <p className="short-feed-title">{item.title}</p>
-              </div>
-            ))}
+    {/* 3. Shorts For You Section (Carousel) */}
+<section className="home-section">
+  <div className="section-header">
+    <h3>Shorts for you</h3>
+    <Link to="/shorts" className="view-all-link">View all</Link>
+  </div>
+  {loadingShorts ? (
+    <div className="section-loading">Loading shorts...</div>
+  ) : (
+    <div className="shorts-carousel-container">
+      {shorts.map((item) => (
+        <div
+          key={item.id}
+          className="short-feed-card"
+          onClick={() => navigate('/shorts')}
+        >
+          <div className="short-img-wrapper">
+            <img src={item.thumbnailUrl} alt={item.title} />
           </div>
-        )}
-      </section>
+          <p className="short-feed-title">{item.title}</p>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
 
       {/* 4. Recommended For You Section */}
       <section className="home-section">
