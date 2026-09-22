@@ -10,6 +10,55 @@
   z-index: 100;
   gap: 16px;
 }
+/* Container active focus border */
+.search-bar-container.active {
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+.search-bar-container {
+  position: relative;
+}
+
+/* Floating Suggestions Dropdown Modal */
+.search-suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e5e7eb;
+  z-index: 1000;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #374151;
+  font-size: 14px;
+  transition: background-color 0.15s ease;
+}
+
+.suggestion-item:hover {
+  background-color: #f3f4f6;
+}
+
+.suggestion-icon {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.suggestion-item.no-match {
+  color: #9ca3af;
+  cursor: default;
+}
 
 /* Hide Logo on Desktop Views */
 .navbar-logo {

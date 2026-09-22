@@ -20,6 +20,24 @@ export default function Builds() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // Fallback builds matching your UI structure (using local videos from /public/videos/)
+  const DUMMY_BUILDS = [
+    {
+      _id: 'dummy-1',
+      title: 'Coanda Effect',
+      week: 'WEEK 2',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+      videoUrl: '/videos/sample-1.mp4',
+    },
+    {
+      _id: 'dummy-2',
+      title: 'String telephone',
+      week: 'WEEK 1',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80',
+      videoUrl: '/videos/sample-2.mp4',
+    },
+  ];
+
   // Re-fetch builds whenever activeTab changes
   useEffect(() => {
     if (activeTab === 'builds') {
@@ -29,59 +47,27 @@ export default function Builds() {
     }
   }, [activeTab]);
 
- /* const fetchBuilds = async () => {
+  // Fetch official weekly builds for the main tab
+  const fetchBuilds = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:4000/getAllBuilds');
+      const res = await fetch(`${import.meta.env.VITE_ALCB_API_URL || 'http://localhost:4000'}/getAllBuilds`);
       const data = await res.json();
-      if (data.success) {
+
+      if (data.success && data.builds && data.builds.length > 0) {
         setBuilds(data.builds);
+      } else {
+        setBuilds(DUMMY_BUILDS); // Fallback to curated weekly challenges
       }
     } catch (err) {
-      console.error('Error loading builds:', err);
+      console.error('Error loading builds, falling back to dummy builds:', err);
+      setBuilds(DUMMY_BUILDS);
     } finally {
       setLoading(false);
     }
-  };*/
-  // Dummy builds array matching your target UI structure
-const DUMMY_BUILDS = [
-  {
-    _id: 'dummy-1',
-    title: 'Coanda Effect',
-    week: 'WEEK 2',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
-    videoUrl: 'https://drive.google.com/file/d/123456789/view',
-  },
-  {
-    _id: 'dummy-2',
-    title: 'String telephone',
-    week: 'WEEK 1',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80',
-    videoUrl: 'https://drive.google.com/file/d/987654321/view',
-  },
-];
+  };
 
-const fetchBuilds = async () => {
-  try {
-    setLoading(true);
-    const res = await fetch('http://localhost:4000/getAllBuilds');
-    const data = await res.json();
-    
-    if (data.success && data.builds && data.builds.length > 0) {
-      setBuilds(data.builds);
-    } else {
-      // Fallback to dummy data if API response is empty
-      setBuilds(DUMMY_BUILDS);
-    }
-  } catch (err) {
-    console.error('Error loading builds, falling back to dummy builds:', err);
-    // Fallback to dummy data on network or backend error
-    setBuilds(DUMMY_BUILDS);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  // Fetch personal user submissions for "My builds" tab
   const fetchMyBuilds = async () => {
     const token = localStorage.getItem('auth-token');
     if (!token) {
@@ -92,7 +78,7 @@ const fetchBuilds = async () => {
 
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:4000/getMyBuilds', {
+      const res = await fetch(`${import.meta.env.VITE_ALCB_API_URL || 'http://localhost:4000'}/getMyBuilds`, {
         method: 'GET',
         headers: {
           'auth-token': token,
@@ -109,11 +95,11 @@ const fetchBuilds = async () => {
     }
   };
 
-  // Convert shareable Drive links into embeddable URLs
+  // Convert Google Drive view links to embed preview links
   const getEmbedVideoUrl = (url) => {
     if (!url) return '';
-    if (url.includes('drive.google.com') && url.includes('/view')) {
-      return url.replace('/view', '/preview');
+    if (url.includes('drive.google.com')) {
+      return url.replace(/\/view(\?.*)?$/, '/preview').replace(/\/edit(\?.*)?$/, '/preview');
     }
     return url;
   };
@@ -136,7 +122,7 @@ const fetchBuilds = async () => {
     }
 
     try {
-      const res = await fetch('http://localhost:4000/addbuild', {
+      const res = await fetch(`${import.meta.env.VITE_ALCB_API_URL || 'http://localhost:4000'}/addbuild`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +201,7 @@ const fetchBuilds = async () => {
         </div>
       )}
 
-      {/* Fullscreen Video Player Overlay */}
+      {/* Fullscreen Video/Media Player Overlay */}
       {selectedBuild && (
         <div className="video-overlay">
           <button className="video-back-btn" onClick={() => setSelectedBuild(null)}>
@@ -223,15 +209,34 @@ const fetchBuilds = async () => {
           </button>
 
           <div className="video-player-container">
-            {selectedBuild.videoUrl.includes('drive.google.com') ? (
+            {/* 1. Direct MP4 Video File (Local or Hosted) */}
+            {selectedBuild.videoUrl.match(/\.(mp4|webm|ogg)$/i) || selectedBuild.videoUrl.startsWith('/videos/') ? (
+              <video
+                src={selectedBuild.videoUrl}
+                controls
+                autoPlay
+                className="video-frame"
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
+            ) : /* 2. Image Media File */
+            selectedBuild.videoUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+              <img
+                src={selectedBuild.videoUrl}
+                alt={selectedBuild.title}
+                className="video-frame"
+                style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+              />
+            ) : /* 3. Embedded Video (Google Drive or YouTube) */
+            selectedBuild.videoUrl.includes('drive.google.com') || selectedBuild.videoUrl.includes('youtube.com') ? (
               <iframe
                 src={getEmbedVideoUrl(selectedBuild.videoUrl)}
                 title={selectedBuild.title}
                 className="video-frame"
-                allow="autoplay"
+                allow="autoplay; encrypted-media"
                 allowFullScreen
               />
             ) : (
+              /* 4. External URL Fallback */
               <div className="thumbnail-fallback">
                 <img src={selectedBuild.thumbnailUrl} alt={selectedBuild.title} />
                 <a
@@ -306,11 +311,11 @@ const fetchBuilds = async () => {
               </div>
 
               <div className="form-group">
-                <label>Video URL (Google Drive shareable link or Embed link)</label>
+                <label>Video URL (Local video path or Google Drive / Web link)</label>
                 <input
-                  type="url"
+                  type="text"
                   name="videoUrl"
-                  placeholder="https://drive.google.com/file/d/..."
+                  placeholder="e.g. /videos/sample-1.mp4 or Drive link"
                   value={formData.videoUrl}
                   onChange={handleInputChange}
                   required

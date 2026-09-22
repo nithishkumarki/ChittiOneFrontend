@@ -1,34 +1,262 @@
-.page-content {
-  padding: 32px;
+.home-feed-container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Banner Card */
+.build-banner-card {
+  display: flex;
+  background-color: #fafafa;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.banner-image-wrapper {
+  flex: 1;
+  max-width: 320px;
+}
+
+.banner-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-content {
+  flex: 2;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.banner-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ff3b30;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.banner-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #111;
+}
+
+.banner-description {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 16px 0;
+}
+
+.banner-btn {
+  background-color: #ff3b30;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.banner-btn:hover {
+  opacity: 0.9;
+}
+
+/* Section Common Headers */
+.home-section {
+  display: flex;
+  flex-direction: column;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-.view-all {
+.section-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.view-all-link {
   color: #ff3b30;
   text-decoration: none;
+  font-size: 12px;
   font-weight: 600;
-  font-size: 14px;
 }
 
-.shorts-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+.section-loading {
+  font-size: 13px;
+  color: #888;
+  padding: 12px 0;
+}
+
+/* Continue Learning Card */
+.continue-learning-grid {
+  display: flex;
   gap: 16px;
 }
 
-@media (max-width: 768px) {
-  .page-content {
-    padding: 16px;
-  }
+.continue-card {
+  width: 180px;
+}
 
-  .shorts-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+/* Shorts Grid (6 Columns) */
+.shorts-grid-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.short-feed-card {
+  cursor: pointer;
+}
+
+.short-img-wrapper {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.short-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.short-feed-card:hover img {
+  transform: scale(1.03);
+}
+
+.short-feed-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+  margin: 6px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Course Grid */
+.courses-grid-home {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.card-image-wrapper img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-info {
+  padding: 10px;
+}
+
+.card-info h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1a1a1a;
+}
+
+.card-info p {
+  font-size: 11px;
+  color: #718096;
+  margin: 0;
+}
+
+/* Weekly Builds Mini Cards */
+.builds-grid-home {
+  display: flex;
+  gap: 16px;
+}
+
+.build-mini-card {
+  width: 160px;
+  cursor: pointer;
+}
+
+.build-mini-img {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.build-mini-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mini-tag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.build-mini-card h4 {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 6px 0 0 0;
+  color: #2d3748;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .build-banner-card {
+    flex-direction: column;
+  }
+  .banner-image-wrapper {
+    max-width: 100%;
+    height: 160px;
+  }
+  .shorts-grid-6 {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

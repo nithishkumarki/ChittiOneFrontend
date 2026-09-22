@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { FiHome, FiBookOpen, FiTool, FiFilm, FiUser } from 'react-icons/fi';
+import SearchResults from './pages/SearchResults';
+
+// Inside your <Routes> definition:
 
 // Context
 import ChittiContextProvider from './context/ChittiContext.jsx';
@@ -9,6 +12,7 @@ import ChittiContextProvider from './context/ChittiContext.jsx';
 import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import BottomNav from './components/BottomNav.jsx';
+import CourseViewer from './components/CourseViewer.jsx';
 
 // Pages
 import Home from './pages/Home.jsx';
@@ -17,7 +21,6 @@ import Builds from './pages/Builds.jsx';
 import Shorts from './pages/Shorts.jsx';
 import Profile from './pages/Profile.jsx';
 import SignupSignin from './pages/SignupSignin.jsx';
-
 import './App.css';
 
 function MainLayout() {
@@ -49,8 +52,10 @@ function MainLayout() {
 
         <main className="main-content">
           <Routes>
+            <Route path="/search/:query" element={<SearchResults />} />
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:courseId" element={<CourseViewer />} />
             <Route path="/builds" element={<Builds />} />
             <Route path="/shorts" element={<Shorts />} />
             <Route path="/profile" element={<Profile />} />
@@ -72,4 +77,3 @@ export default function App() {
     </ChittiContextProvider>
   );
 }
-
