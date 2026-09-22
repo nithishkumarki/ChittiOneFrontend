@@ -1,0 +1,335 @@
+/* Base Desktop Styles */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+  z-index: 100;
+  gap: 16px;
+}
+
+/* Hide Logo on Desktop Views */
+.navbar-logo {
+  display: none;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-image {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  background-color: #f3f4f6;
+  padding: 8px 16px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 440px;
+  transition: all 0.2s ease;
+}
+
+.search-icon {
+  color: #9ca3af;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Grade Selector Wrapper */
+.grade-selector-container {
+  position: relative;
+}
+
+.class-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+  white-space: nowrap;
+  background-color: #ffffff;
+}
+
+.grade-icon {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.grade-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 280px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  z-index: 1000;
+  border: 1px solid #f3f4f6;
+}
+
+.grade-dropdown-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.grade-options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.grade-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.grade-chip:hover {
+  background-color: #f9fafb;
+}
+
+.grade-chip.active {
+  background-color: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+/* Log In Button */
+.login-btn {
+  background-color: #ff3b30;
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* User Badge Button */
+.user-menu-container {
+  position: relative;
+}
+
+.user-badge-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.user-badge-btn:hover {
+  background-color: #f9fafb;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ff3b30;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-circle.large {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+}
+
+.username-text {
+  font-weight: 600;
+  color: #111827;
+  font-size: 14px;
+}
+
+/* User Dropdown Menu */
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  z-index: 1000;
+  border: 1px solid #f3f4f6;
+}
+
+.dropdown-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #111827;
+}
+
+.signed-in-tag {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #f3f4f6;
+  margin: 8px 0;
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f9fafb;
+}
+
+.dropdown-item.logout {
+  color: #ff3b30;
+}
+
+.dropdown-icon {
+  font-size: 18px;
+}
+
+/* =========================================================
+   Mobile Optimization Rules (Screens <= 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  /* Reveal Logo Only on Mobile Screens */
+  .navbar-logo {
+    display: flex;
+  }
+
+  .logo-image {
+    height: 28px;
+  }
+
+  .search-bar-container {
+    padding: 6px 8px;
+    border-radius: 18px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .search-input {
+    font-size: 12px;
+  }
+
+  .navbar-right {
+    gap: 4px;
+  }
+
+  .class-selector {
+    padding: 6px;
+    border-radius: 18px;
+  }
+  
+  .selected-grade-label {
+    display: none;
+  }
+
+  .grade-dropdown-menu {
+    position: fixed;
+    top: 56px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: calc(100vw - 24px);
+  }
+
+  .user-badge-btn {
+    padding: 2px 4px 2px 2px;
+    border-radius: 20px;
+  }
+
+  .username-text {
+    display: none;
+  }
+
+  .avatar-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .user-dropdown-menu {
+    right: 0;
+    width: 220px;
+  }
+}
